@@ -1,7 +1,7 @@
 (ns day1
   (:require [clojure.string :as str]))
 
-(def inputs (->> "../data/day1.txt"
+(def inputs (->> "data/day1.txt"
                 slurp
                 str/split-lines))
 
@@ -13,7 +13,7 @@
         tail (last digits)]
     (str lead tail)))
 
-(println "q1: " (reduce #(+ %1 (Integer/parseInt %2)) 0 (map q1 inputs)))
+
 
 (defn get-first-char-digits [digits input]
   (zipmap (map val digits) (map #(str/index-of input %) (keys digits))))
@@ -43,5 +43,8 @@
         last-digit (get-last-digit (get-last-char-digits digits input) (get-digits input))]
     (Integer/parseInt (str first-digit last-digit))))
 
-(println "q2: " (reduce + (map parse-q2 inputs)))
 
+
+(defn run [_ & _] (do
+                    (println "q1: " (reduce #(+ %1 (Integer/parseInt %2)) 0 (map q1 inputs)))
+                    (println "q2: " (reduce + (map parse-q2 inputs)))))
