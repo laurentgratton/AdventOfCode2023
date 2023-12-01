@@ -15,8 +15,6 @@
 
 (println "q1: " (reduce #(+ %1 (Integer/parseInt %2)) 0 (map q1 inputs)))
 
-(map #(str/index-of (first inputs) %) (keys digits))
-
 (defn get-first-char-digits [digits input]
   (zipmap (map val digits) (map #(str/index-of input %) (keys digits))))
 
