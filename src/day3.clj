@@ -36,5 +36,28 @@
 
 (defn get-numbers-in-row [index row]
   (filter #(is-part-num? symbols (get-rows-to-parse % index) (get-range-to-parse %)) row))
+
+(def possible-gears (map-indexed #(list %1 (re-seq-pos #"([\*])" %2)) input))
+(defn check-numbers [gear numbers]
+  (filter #(or
+             (<= (:start gear) (:start %) (:end gear))
+             (<= (:start gear) (:end %) (:end gear))
+             (<= (:start %) (:start gear) (:end %))) numbers))
+(defn gear-filter [[index gears]]
+  (let [row-indexes (get-rows-to-parse 0 index)
+        rows (sort-by :start (flatten (map #(nth potential-numbers %) row-indexes)))
+        gear-values (filter #(< 1 (count %)) (map #(check-numbers % rows) gears))]
+    (reduce + 0 (map #(* (Integer/parseInt (:group (first %))) (Integer/parseInt (:group (second %)))) gear-values))))
+
+
+
+
+
 (defn run [_] (do
-                (println "q1: " (reduce #(+ %1 (Integer/parseInt %2)) 0 (map :group (flatten (map-indexed get-numbers-in-row potential-numbers)))))))
+                (println "q1: " (reduce #(+ %1 (Integer/parseInt %2)) 0 (map :group (flatten (map-indexed get-numbers-in-row potential-numbers)))))
+                (println "q2: " (->> possible-gears
+                                     (map gear-filter)
+                                     (reduce +)))))
+
+
+(run 1)
